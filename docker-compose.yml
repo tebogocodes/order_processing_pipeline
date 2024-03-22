@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash start.sh
+    volumes:
+      - .:$APP_DIR
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+  redis:
+    image: "redis:alpine"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 1G
